@@ -1,4 +1,4 @@
 {
-  "assetsBaseUrl": "https://moshbucket1.s3.us-east-2.amazonaws.com/",
+  "imagesBaseUrl": "https://storage.googleapis.com/doneimages/images/",
   "GCLOUD_STORAGE_BUCKET": "doneimages"
 }

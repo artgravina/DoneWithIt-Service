@@ -1,8 +1,6 @@
 {
   "imagesBaseUrl": "https://storage.googleapis.com/doneimages/images/",
   "maxImageCount": 3,
-  "assetsBaseUrl": "http://192.168.1.146:8080/assets/",
   "port": 8080,
-  "GCLOUD_STORAGE_BUCKET": "doneimages",
-  "delay": 5000
+  "GCLOUD_STORAGE_BUCKET": "doneimages"
 }
