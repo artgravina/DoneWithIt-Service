@@ -1,12 +1,14 @@
 const auth = require("../middleware/auth");
 const express = require("express");
-const firebaseStorage = require("../store/firebaseStorage");
+const firebaseStorage = require("../store/services/firebaseStorage");
 const router = express.Router();
-const store = require("../store/listings");
+const listingStore = require("../store/listings");
+const userStore = require("../store/users");
 
 router.get("/", auth, async (req, res) => {
   try {
-    const numListings = store.addSamples();
+    userStore.addSamples();
+    const numListings = listingStore.addSamples();
     await firebaseStorage.clearAllImages();
     await firebaseStorage.uploadSampleImages();
     res.send("ok");

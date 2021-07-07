@@ -1,3 +1,6 @@
+var fs = require("fs");
+const firebaseUsers = require("../store/services/firebaseUsers");
+
 const users = [
   {
     id: 1,
@@ -24,9 +27,19 @@ const addUser = (user) => {
   users.push(user);
 };
 
+const addSamples = () => {
+  var json = fs.readFileSync("./sample_users.json", "utf-8");
+  const usersArray = JSON.parse(json);
+  usersArray.forEach(async (user) => {
+    const userId = await firebaseUsers.addUser(user);
+    console.log("userId: ", userId);
+  });
+};
+
 module.exports = {
   getUsers,
   getUserByEmail,
   getUserById,
   addUser,
+  addSamples,
 };

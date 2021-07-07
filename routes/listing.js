@@ -1,5 +1,5 @@
 const express = require("express");
-const firebaseStorage = require("../store/firebaseStorage");
+const firebaseStorage = require("../store/services/firebaseStorage");
 const router = express.Router();
 
 const store = require("../store/listings");

@@ -111,7 +111,7 @@ async function clearAllImages() {
 
 async function uploadSampleImages() {
   const bucket = storage.bucket(bucketName);
-  var moveFrom = "./uploads/assets";
+  var moveFrom = "./uploads/images";
 
   console.log("uploadSampleImages");
   // Loop through all the files in the temp directory

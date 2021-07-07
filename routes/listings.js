@@ -10,7 +10,7 @@ const imageResize = require("../middleware/imageResize");
 const store = require("../store/listings");
 const listingMapper = require("../mappers/listings");
 const validateWith = require("../middleware/validation");
-const firebaseStorage = require("../store/firebaseStorage");
+const firebaseStorage = require("../store/services/firebaseStorage");
 
 // Multer is required to process file uploads and make them available via
 // req.files.
