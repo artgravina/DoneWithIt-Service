@@ -50,6 +50,7 @@ const categories = [
   {
     id: 7,
     name: "Movies & Music",
+    label: "Movies & Music",
     icon: "headphones",
     backgroundColor: "#4b7bec",
     color: "white",

@@ -9,7 +9,7 @@ const my = require("./routes/my");
 const messages = require("./routes/messages");
 const expoPushTokens = require("./routes/expoPushTokens");
 const test = require("./routes/testing");
-const listingsInitialize = require("./routes/listingsInitialize");
+const loadSamples = require("./routes/loadSamples");
 const helmet = require("helmet");
 const compression = require("compression");
 const config = require("config");
@@ -29,7 +29,7 @@ app.use("/api/auth", auth);
 app.use("/api/my", my);
 app.use("/api/expoPushTokens", expoPushTokens);
 app.use("/api/messages", messages);
-app.use("/api/initialize", listingsInitialize);
+app.use("/api/initialize", loadSamples);
 app.use("/test", test);
 
 const port = process.env.PORT || config.get("port");

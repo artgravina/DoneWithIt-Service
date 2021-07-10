@@ -7,16 +7,19 @@ const userStore = require("../store/users");
 
 router.get("/", auth, async (req, res) => {
   try {
-    userStore.addSamples();
-    const numListings = listingStore.addSamples();
+    await userStore.clearUsers();
+    await userStore.addSamples();
+    await listingStore.clearListings();
+    const numListings = await listingStore.addSamples();
     await firebaseStorage.clearAllImages();
-    await firebaseStorage.uploadSampleImages();
+    await firebaseStorage.addSamples();
+
     res.send("ok");
   } catch (error) {
     console.log("trycatch error", error);
     res
       .status(400)
-      .send({ error: "Invalid /listingsInitialize.", message: error.message });
+      .send({ error: "Invalid /loadSamples.", message: error.message });
   }
 });
 

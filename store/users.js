@@ -1,45 +1,49 @@
 var fs = require("fs");
 const firebaseUsers = require("../store/services/firebaseUsers");
 
-const users = [
-  {
-    id: 1,
-    name: "Mosh",
-    email: "mosh@domain.com",
-    password: "12345",
-  },
-  {
-    id: 2,
-    name: "John",
-    email: "john@domain.com",
-    password: "12345",
-  },
-];
+const getUsers = () => {
+  users = firebaseUsers.getUsers();
+};
 
-const getUsers = () => users;
+const getUserById = async (id) => {
+  const user = await firebaseUsers.getUser(id);
+  return user;
+};
 
-const getUserById = (id) => users.find((user) => user.id === id);
-
-const getUserByEmail = (email) => users.find((user) => user.email === email);
+// the user is our id since it must be unique.
+const getUserByEmail = async (email) => {
+  const user = await getUserById(email);
+  return user;
+};
 
 const addUser = (user) => {
-  user.id = users.length + 1;
+  const newUser = firebaseUsers.addUser(user);
   users.push(user);
 };
 
 const addSamples = () => {
-  var json = fs.readFileSync("./sample_users.json", "utf-8");
-  const usersArray = JSON.parse(json);
-  usersArray.forEach(async (user) => {
-    const userId = await firebaseUsers.addUser(user);
-    console.log("userId: ", userId);
-  });
+  try {
+    var json = fs.readFileSync("./uploads/sample_users.json", "utf-8");
+    const usersArray = JSON.parse(json);
+    let users = [];
+    usersArray.forEach(async (user) => {
+      const userId = await firebaseUsers.addUser(user);
+      console.log("userId: ", userId);
+    });
+  } catch (error) {
+    console.log("uses addSamples: ", error);
+  }
+};
+
+const clearUsers = async () => {
+  await firebaseUsers.deleteAll();
 };
 
 module.exports = {
   getUsers,
-  getUserByEmail,
   getUserById,
+  getUserByEmail,
   addUser,
   addSamples,
+  clearUsers,
 };

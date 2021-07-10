@@ -1,3 +1,6 @@
+const firebaseListings = require("../store/services/firebaseListings");
+var fs = require("fs");
+
 let listings = [];
 const listingsSample = [
   {
@@ -6,7 +9,7 @@ const listingsSample = [
     images: [{ fileName: "jacket1" }],
     price: 100,
     categoryId: 5,
-    userId: 1,
+    userEmail: "mosh@domain.com",
     location: {
       latitude: 37.78825,
       longitude: -122.4324,
@@ -18,7 +21,7 @@ const listingsSample = [
     images: [{ fileName: "couch2" }],
     categoryId: 1,
     price: 1200,
-    userId: 2,
+    userEmail: "john@domain.com",
     location: {
       latitude: 37.78825,
       longitude: -122.4324,
@@ -36,7 +39,7 @@ const listingsSample = [
     ],
     price: 1000,
     categoryId: 1,
-    userId: 1,
+    userEmail: "mosh@domain.com",
     location: {
       latitude: 37.78825,
       longitude: -122.4324,
@@ -48,7 +51,7 @@ const listingsSample = [
     images: [{ fileName: "shoes1" }],
     categoryId: 5,
     price: 100,
-    userId: 2,
+    userEmail: "john@domain.com",
     location: {
       latitude: 37.78825,
       longitude: -122.4324,
@@ -60,7 +63,7 @@ const listingsSample = [
     images: [{ fileName: "camera1" }],
     price: 300,
     categoryId: 3,
-    userId: 1,
+    userEmail: "mosh@domain.com",
     location: {
       latitude: 37.78825,
       longitude: -122.4324,
@@ -72,7 +75,7 @@ const listingsSample = [
     images: [{ fileName: "camera2" }],
     price: 350,
     categoryId: 3,
-    userId: 1,
+    userEmail: "mosh@domain.com",
     location: {
       latitude: 37.78825,
       longitude: -122.4324,
@@ -85,7 +88,7 @@ const listingsSample = [
     images: [{ fileName: "couch3" }],
     categoryId: 1,
     price: 950,
-    userId: 2,
+    userEmail: "john@domain.com",
     location: {
       latitude: 37.78825,
       longitude: -122.4324,
@@ -97,7 +100,7 @@ const listingsSample = [
     images: [{ fileName: "shoes2" }],
     categoryId: 5,
     price: 50,
-    userId: 2,
+    userEmail: "john@domain.com",
     location: {
       latitude: 37.78825,
       longitude: -122.4324,
@@ -105,43 +108,43 @@ const listingsSample = [
   },
 ];
 
-const addListing = (listing) => {
-  listing.id = listings.length + 1;
+const addListing = async (listing) => {
+  const newListing = await firebaseUsers.addListing(listing);
   listings.push(listing);
+  // return newListing;
 };
 
-const getListings = () => listings;
-
-const getListing = (id) => listings.find((listing) => listing.id === id);
-
-const filterListings = (predicate) => listings.filter(predicate);
-
-const clearListings = () => {
-  listings = [];
+const getListings = async () => {
+  return await firebaseListings.getListings();
 };
 
-const updateListing = (listing) => {
+const getListing = async (id) => {
+  const listing = await firebaseListings.getListing(id);
+  return listing;
+};
+
+const updateListing = async (listing) => {
   console.log(listing);
-  let index = listings.findIndex((l) => l.id === listing.id);
-  listings[index] = listing;
+  const resp = await firebaseListings.updateListing(listing);
 };
 
-const deleteListing = (listing) => {
+const deleteListing = async (listing) => {
   console.log(listing);
-  let index = listings.findIndex((l) => l.id === listing.id);
-  if (index != -1) {
-    console.log("found: ", index, listings[index]);
-    listings.splice(index, 1);
-    return true;
-  } else {
-    console.log("not found: ");
-    return false;
-  }
+  const response = await firebaseListings.deleteListing(id);
 };
 
-const addSamples = () => {
-  listings = JSON.parse(JSON.stringify(listingsSample));
-  return listings.length;
+const addSamples = async () => {
+  var json = fs.readFileSync("./uploads/sample_listings.json", "utf-8");
+  const listingsArray = JSON.parse(json);
+  let users = [];
+  listingsArray.forEach(async (listing) => {
+    const newListing = await firebaseListings.addListing(listing);
+    console.log("listingId: ", newListing.listingId);
+  });
+};
+
+const clearListings = async () => {
+  await firebaseListings.deleteAll();
 };
 
 module.exports = {
@@ -150,7 +153,6 @@ module.exports = {
   getListing,
   updateListing,
   deleteListing,
-  filterListings,
   clearListings,
   addSamples,
 };

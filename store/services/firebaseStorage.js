@@ -109,11 +109,11 @@ async function clearAllImages() {
   await deleteImages(imagesPath);
 }
 
-async function uploadSampleImages() {
+async function addSamples() {
   const bucket = storage.bucket(bucketName);
-  var moveFrom = "./uploads/images";
+  var moveFrom = "./uploads/sample_images";
 
-  console.log("uploadSampleImages");
+  console.log("addSample Images");
   // Loop through all the files in the temp directory
   fs.readdir(moveFrom, async function (err, files) {
     if (err) {
@@ -152,5 +152,5 @@ module.exports = {
   deleteListingImages,
   deleteUrlImages,
   clearAllImages,
-  uploadSampleImages,
+  addSamples,
 };

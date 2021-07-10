@@ -45,8 +45,9 @@ const track = (req, res, next) => {
   next();
 };
 
-router.get("/", (req, res) => {
-  const listings = store.getListings();
+router.get("/", async (req, res) => {
+  const listings = await store.getListings();
+  // console.log("listings: ", listings);
   const resources = listings.map(listingMapper);
   res.send(resources);
 });
