@@ -4,7 +4,7 @@
     "images": [{ "fileName": "jacket1" }],
     "price": 100,
     "categoryId": 5,
-    "userId": "mosh@domain.com",
+    "userEmail": "mosh@domain.com",
     "location": {
       "latitude": 37.78825,
       "longitude": -122.4324
@@ -15,7 +15,7 @@
     "images": [{ "fileName": "couch2" }],
     "categoryId": 1,
     "price": 1200,
-    "userId": "john@domain.com",
+    "userEmail": "john@domain.com",
     "location": {
       "latitude": 37.78825,
       "longitude": -122.4324
@@ -31,7 +31,7 @@
     ],
     "price": 1000,
     "categoryId": 1,
-    "userId": "mosh@domain.com",
+    "userEmail": "mosh@domain.com",
     "location": {
       "latitude": 37.78825,
       "longitude": -122.4324
@@ -42,7 +42,7 @@
     "images": [{ "fileName": "shoes1" }],
     "categoryId": 5,
     "price": 100,
-    "userId": "john@domain.com",
+    "userEmail": "john@domain.com",
     "location": {
       "latitude": 37.78825,
       "longitude": -122.4324
@@ -53,7 +53,7 @@
     "images": [{ "fileName": "camera1" }],
     "price": 300,
     "categoryId": 3,
-    "userId": "mosh@domain.com",
+    "userEmail": "mosh@domain.com",
     "location": {
       "latitude": 37.78825,
       "longitude": -122.4324
@@ -64,7 +64,7 @@
     "images": [{ "fileName": "camera2" }],
     "price": 350,
     "categoryId": 3,
-    "userId": "mosh@domain.com",
+    "userEmail": "mosh@domain.com",
     "location": {
       "latitude": 37.78825,
       "longitude": -122.4324
@@ -76,7 +76,7 @@
     "images": [{ "fileName": "couch3" }],
     "categoryId": 1,
     "price": 950,
-    "userId": "john@domain.com",
+    "userEmail": "john@domain.com",
     "location": {
       "latitude": 37.78825,
       "longitude": -122.4324
@@ -87,7 +87,7 @@
     "images": [{ "fileName": "shoes2" }],
     "categoryId": 5,
     "price": 50,
-    "userId": "john@domain.com",
+    "userEmail": "john@domain.com",
     "location": {
       "latitude": 37.78825,
       "longitude": -122.4324

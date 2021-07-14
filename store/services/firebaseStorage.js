@@ -95,13 +95,14 @@ async function deleteListingImages(listing) {
 }
 
 // will delete both thumb/full for a url
-function deleteUrlImages(urls) {
-  urls.forEach(async (url) => {
+async function deleteUrlImages(urls) {
+  for (const index in urls) {
+    const url = urls[index];
     const bucket = storage.bucket(bucketName);
     const fullname = url.split("/").pop();
     const filename = fullname.substr(0, fullname.lastIndexOf("."));
     await deleteFile(filename);
-  });
+  }
   return true;
 }
 

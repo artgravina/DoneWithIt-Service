@@ -1,15 +1,12 @@
 const express = require("express");
 const router = express.Router();
-// const listing = require("../store/services/firebaseListings");
-const listing = require("../store/listings");
+const listing = require("../store/services/firebaseListings");
+const user = require("../store/services/firebaseUsers");
 
-// delete files
 router.get("/", async (req, res) => {
   try {
-    console.log("begin testing");
-    await listing.clearListings();
-    await listing.addSamples();
-    console.log("listings cleared");
+    console.log("begin testings");
+    user.test();
     const response = "nothing";
     res.send(`testing finished ok: ${response}`);
   } catch (error) {

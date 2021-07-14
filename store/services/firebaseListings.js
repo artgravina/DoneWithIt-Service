@@ -14,11 +14,8 @@ async function addListing(listing) {
     data: listing,
   };
   await datastore.save(entity);
-  // console.log("save successful");
-  entity.data.listingId = entity.key.id;
+  entity.data.id = entity.key.id;
   await updateListing(entity.data);
-  // console.log("update successful");
-  // console.log(`Listing created: ${entity.data}`);
   return entity.data;
 }
 
@@ -33,14 +30,31 @@ async function getListing(listingId) {
   return listing;
 }
 
+const debugListings = (listingArray) => {
+  console.log("firebase getListings ==============");
+  listingArray.forEach((listing) => {
+    console.log(listing.title, listing.price);
+  });
+  console.log("end ==================");
+};
+
 async function getListings() {
   const query = datastore.createQuery(listingEntity);
   const response = await datastore.runQuery(query);
   // 0 is data, 1 is moreResults, etc
-  console.log("response: ", response[0]);
+  debugListings(response[0]);
   return response[0]; // just the data
 }
 
+const getUserListings = async (userId) => {
+  const query = datastore
+    .createQuery(listingEntity)
+    .filter("userId", "=", userId);
+
+  const response = await datastore.runQuery(query);
+  debugListings(response[0]);
+  return response[0];
+};
 async function deleteListing(listingId) {
   const kind = listingEntity;
   const id = datastore.int(listingId);
@@ -54,15 +68,17 @@ async function deleteListing(listingId) {
 async function deleteAll() {
   const query = datastore.createQuery(listingEntity).select("__key__");
   const [entities] = await datastore.runQuery(query);
-  entities.forEach(async (entity) => {
+  for (const index in entities) {
+    const entity = entities[index];
     let id = entity[datastore.KEY].id;
     await deleteListing(id);
-  });
+  }
 }
 
 async function updateListing(listing) {
+  console.log("updateListing: ", listing);
   const kind = listingEntity;
-  const id = datastore.int(listing.listingId);
+  const id = datastore.int(listing.id);
   const listingKey = datastore.key([kind, id]);
 
   const entity = {
@@ -97,17 +113,20 @@ const listing2 = {
 
 async function test() {
   try {
-    // let response1 = await addListing(listing1);
-    // console.log("1: ", response1);
-    // let response2 = await addListing(listing2);
-    // console.log("2: ", response2);
+    console.log("firebaseListing.test");
+    let response1 = await addListing(listing1);
+    console.log("1: ", response1);
+    let response2 = await addListing(listing2);
+    console.log("2: ", response2);
+    let listing = await getListing(response1.id);
+    console.log("listing: ", listing);
 
-    await deleteAll();
+    // await deleteAll();
     // let response1 = await addListing(listing1);
     // console.log("1: ", response1);
     // let response2 = await addListing(listing2);
     // console.log("2: ", response2);
-    // let listing = await getListing(response1.listingId);
+    // let listing = await getListing(response1.id);
     // console.log("listing: ", listing);
     // listing.name = "Arthur";
     // const resp = await updateListing(listing);
@@ -117,18 +136,26 @@ async function test() {
     // console.log(`listing ${id} deleted: ${response}`);
     // const listings = await getListings();
     // listings.forEach((listing) => {
-    //   console.log("all: ", listing.listingId);
+    //   console.log("all: ", listing.id);
     // });
   } catch (err) {
     console.error("ERROR:", err);
   }
 }
 
+// async function test2() {
+//   console.log("begin testing");
+//   await listing.clearListings();
+//   await listing.addSamples();
+//   console.log("listings cleared");
+// }
+
 module.exports = {
   test,
   addListing,
   getListing,
   getListings,
+  getUserListings,
   deleteListing,
   deleteAll,
   updateListing,

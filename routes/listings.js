@@ -79,7 +79,7 @@ router.post(
     };
     listing.images = req.images.map((fileName) => ({ fileName: fileName }));
     if (req.body.location) listing.location = JSON.parse(req.body.location);
-    if (req.user) listing.userId = req.user.userId;
+    if (req.user) listing.userId = req.user.id;
 
     store.addListing(listing);
 
@@ -123,26 +123,29 @@ router.put(
     listing.images = [];
     // Files that have been already uploaded
     console.log(existingFilenames, existingFilenames.length);
-    existingFilenames.forEach((filename) => {
+    for (const index in existingFilenames) {
+      const filename = existingFilenames[index];
       listing.images.push({ fileName: filename });
-    });
+    }
 
     // Files that have been uploaded this time
     console.log(newFilenames);
-    newFilenames.forEach((image) => {
+    for (const index in newFilenames) {
+      const image = newFilenames[index];
       listing.images.push(image);
-    });
+    }
 
     // existing image user has deleted
     console.log(deletedFilenames, deletedFilenames.length);
-    deletedFilenames.forEach(async (filename) => {
+    for (const index in deletedFilenames) {
+      const filename = deletedFilenames[index];
       await firebaseStorage.deleteFile(filename);
-    });
+    }
 
     console.log(listing.images);
 
     if (req.body.location) listing.location = JSON.parse(req.body.location);
-    if (req.user) listing.userId = req.user.userId;
+    if (req.user) listing.userId = req.user.id;
 
     // res.status(201).send("test ok");
     // return;

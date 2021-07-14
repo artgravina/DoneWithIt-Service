@@ -12,7 +12,7 @@ const getUserById = async (id) => {
 
 // the user is our id since it must be unique.
 const getUserByEmail = async (email) => {
-  const user = await getUserById(email);
+  const user = await firebaseUsers.getUserByEmail(email);
   return user;
 };
 
@@ -21,15 +21,22 @@ const addUser = (user) => {
   users.push(user);
 };
 
-const addSamples = () => {
+const addUserSamples = async (usersArray) => {
+  for (const index in usersArray) {
+    const user = usersArray[index];
+    const userFound = await firebaseUsers.getUserByEmail(user.email);
+    if (!userFound) {
+      const newuser = await firebaseUsers.addUser(user);
+    }
+  }
+};
+
+// only re-add user if not there.
+const addSamples = async () => {
   try {
     var json = fs.readFileSync("./uploads/sample_users.json", "utf-8");
     const usersArray = JSON.parse(json);
-    let users = [];
-    usersArray.forEach(async (user) => {
-      const userId = await firebaseUsers.addUser(user);
-      console.log("userId: ", userId);
-    });
+    await addUserSamples(usersArray);
   } catch (error) {
     console.log("uses addSamples: ", error);
   }

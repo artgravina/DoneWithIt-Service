@@ -5,10 +5,9 @@ const listingsStore = require("../store/listings");
 const auth = require("../middleware/auth");
 const listingMapper = require("../mappers/listings");
 
-router.get("/listings", auth, (req, res) => {
-  const listings = listingsStore.filterListings(
-    (listing) => listing.userId === req.user.userId
-  );
+router.get("/:id", auth, async (req, res) => {
+  const userId = req.params.id;
+  const listings = await listingsStore.getUserListings(userId);
   const resources = listings.map(listingMapper);
   res.send(resources);
 });

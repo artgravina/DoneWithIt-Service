@@ -16,7 +16,7 @@ const schema = {
 };
 
 router.get("/", auth, (req, res) => {
-  const messages = messagesStore.getMessagesForUser(req.user.userId);
+  const messages = messagesStore.getMessagesForUser(req.user.id);
 
   const mapUser = (userId) => {
     const user = usersStore.getUserById(userId);
@@ -45,7 +45,7 @@ router.post("/", [auth, validateWith(schema)], async (req, res) => {
   if (!targetUser) return res.status(400).send({ error: "Invalid userId." });
 
   messagesStore.add({
-    fromUserId: req.user.userId,
+    fromUserId: req.user.id,
     toUserId: listing.userId,
     listingId,
     content: message,

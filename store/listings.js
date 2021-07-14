@@ -1,7 +1,7 @@
 const firebaseListings = require("../store/services/firebaseListings");
+const userStore = require("../store/users");
 var fs = require("fs");
 
-let listings = [];
 const listingsSample = [
   {
     id: 201,
@@ -109,13 +109,16 @@ const listingsSample = [
 ];
 
 const addListing = async (listing) => {
-  const newListing = await firebaseUsers.addListing(listing);
-  listings.push(listing);
+  const newListing = await firebaseListings.addListing(listing);
   // return newListing;
 };
 
 const getListings = async () => {
   return await firebaseListings.getListings();
+};
+
+const getUserListings = async (userId) => {
+  return await firebaseListings.getUserListings(userId);
 };
 
 const getListing = async (id) => {
@@ -124,23 +127,30 @@ const getListing = async (id) => {
 };
 
 const updateListing = async (listing) => {
-  console.log(listing);
   const resp = await firebaseListings.updateListing(listing);
 };
 
-const deleteListing = async (listing) => {
-  console.log(listing);
+const deleteListing = async (id) => {
   const response = await firebaseListings.deleteListing(id);
 };
 
 const addSamples = async () => {
   var json = fs.readFileSync("./uploads/sample_listings.json", "utf-8");
   const listingsArray = JSON.parse(json);
-  let users = [];
-  listingsArray.forEach(async (listing) => {
-    const newListing = await firebaseListings.addListing(listing);
-    console.log("listingId: ", newListing.listingId);
-  });
+  for (const index in listingsArray) {
+    const listingOrig = listingsArray[index];
+    const { userEmail, ...listingNew } = listingOrig;
+
+    const user = await userStore.getUserByEmail(userEmail);
+    let userId = 0;
+    if (user) {
+      userId = user.id;
+    }
+    listingNew.userId = userId;
+
+    const newListing = await firebaseListings.addListing(listingNew);
+    console.log("listingId: ", newListing.id, newListing.userId);
+  }
 };
 
 const clearListings = async () => {
@@ -151,6 +161,7 @@ module.exports = {
   addListing,
   getListings,
   getListing,
+  getUserListings,
   updateListing,
   deleteListing,
   clearListings,
