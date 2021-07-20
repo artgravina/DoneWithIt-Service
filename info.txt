@@ -7,6 +7,9 @@ app engine / settings / enable
 To deploy revised app:
 gcloud app deploy
 
+To create composite indexes, see index.yaml file.
+gcloud datastore indexes create index.yaml
+
 To view logs: 
 gcloud app logs tail
 

@@ -39,7 +39,9 @@ const debugListings = (listingArray) => {
 };
 
 async function getListings() {
-  const query = datastore.createQuery(listingEntity);
+  const query = datastore.createQuery(listingEntity).order("updated", {
+    descending: true,
+  });
   const response = await datastore.runQuery(query);
   // 0 is data, 1 is moreResults, etc
   debugListings(response[0]);
@@ -49,7 +51,10 @@ async function getListings() {
 const getUserListings = async (userId) => {
   const query = datastore
     .createQuery(listingEntity)
-    .filter("userId", "=", userId);
+    .filter("userId", "=", userId)
+    .order("updated", {
+      descending: true,
+    });
 
   const response = await datastore.runQuery(query);
   debugListings(response[0]);

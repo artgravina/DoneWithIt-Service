@@ -1,0 +1,6 @@
+indexes:
+  - kind: Listings
+    properties:
+      - name: userId
+      - name: updated
+        direction: desc
