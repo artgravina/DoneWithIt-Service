@@ -1,8 +1,9 @@
 var fs = require("fs");
 const firebaseUsers = require("../store/services/firebaseUsers");
 
-const getUsers = () => {
-  users = firebaseUsers.getUsers();
+const getUsers = async () => {
+  const users = await firebaseUsers.getUsers();
+  return users;
 };
 
 const getUserById = async (id) => {
@@ -16,9 +17,9 @@ const getUserByEmail = async (email) => {
   return user;
 };
 
-const addUser = (user) => {
-  const newUser = firebaseUsers.addUser(user);
-  users.push(user);
+const addUser = async (user) => {
+  const newUser = await firebaseUsers.addUser(user);
+  return newUser;
 };
 
 const addUserSamples = async (usersArray) => {
