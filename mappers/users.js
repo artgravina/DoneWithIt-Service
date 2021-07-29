@@ -2,14 +2,11 @@ const config = require("config");
 
 const mapper = (user) => {
   const baseUrl = config.get("imagesBaseUrl");
-  const mapImage = (image) => {
-    const icon = `${baseUrl}${image.fileName}_icon.jpg`;
-    return icon;
-  };
+  const iconUrl = user.icon ? `${baseUrl}${user.icon}_userIcon.jpg` : null;
 
   return {
     ...user,
-    iconUrl: mapImage(user.icon),
+    iconUrl: iconUrl,
   };
 };
 

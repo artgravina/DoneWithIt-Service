@@ -13,11 +13,6 @@ router.get("/:id", auth, (req, res) => {
   res.send(resource);
 });
 
-// router.delete("/:id", auth, async (req, res, next) => {
-//   console.log("listing delete", req.params.id);
-//   setTimeout(next, 5000);
-// });
-
 router.delete("/:id", auth, async (req, res) => {
   console.log("listing delete", req.params.id);
   const listing = await store.getListing(parseInt(req.params.id));

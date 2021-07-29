@@ -15,23 +15,16 @@ const imagesPath = "images/";
 // params.quality is the image quality you desire
 // if size = null no conversion
 const upload = async (file, path, params) => {
-  console.log("uploadToStorage", file.buffer.length);
-
-  // console.log("****");
-
   const newImageBuffer = await sharp(file.buffer)
     .resize(params.width)
     .jpeg({ quality: params.quality })
     .toBuffer();
-  // console.log(newImageBuffer);
-  // replace original buffer
+
   file.buffer = newImageBuffer;
-  console.log("after compress", file.buffer.length);
 
   const { originalname, buffer } = file;
 
   const promise = new Promise((resolve, reject) => {
-    // console.log("begin upload");
     const blob = bucket.file(path);
     const blobStream = blob.createWriteStream({
       resumable: false,
@@ -42,7 +35,6 @@ const upload = async (file, path, params) => {
         reject(`Unable to upload image ${err.message}`);
       })
       .on("finish", async () => {
-        // console.log("begin complete");
         const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
 
         resolve(publicUrl);

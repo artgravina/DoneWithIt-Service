@@ -3,6 +3,7 @@ const router = express.Router();
 const Joi = require("joi");
 const Multer = require("multer");
 const usersStore = require("../store/users");
+const userMapper = require("../mappers/users");
 const iconResize = require("../middleware/iconResize");
 
 const validateWith = require("../middleware/validation");
@@ -42,9 +43,10 @@ router.post(
     user.icon = req.filename;
     const newuser = await usersStore.addUser(user);
     user.id = newuser.id;
-    console.log("userAdded: ", user);
 
-    res.status(201).send(user);
+    const userResource = userMapper(user);
+    console.log("userAdded: ", userResource);
+    res.status(201).send(userResource);
   }
 );
 

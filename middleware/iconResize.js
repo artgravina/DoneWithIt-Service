@@ -9,17 +9,12 @@ module.exports = async (req, res, next) => {
     // console.log(req);
   }
   file.filename = uuid();
-  console.log("file: ", file);
-  console.log("========");
   const bufferOrig = file.buffer;
   const fullPath = `${directory}/${file.filename}_userIcon.jpg`;
-  console.log("fullPath: ", fullPath);
-  console.log("=======");
   const urlFull = await firebaseStorage.upload(file, fullPath, {
     width: 200,
     quality: 50,
   });
   req.filename = file.filename;
-  console.log("iconResize end ========");
   next();
 };

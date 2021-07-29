@@ -13,12 +13,8 @@ async function addUser(user) {
     data: user,
   };
   await datastore.save(entity);
-  console.log("save successful");
   entity.data.id = entity.key.id;
-  console.log("entity: ", entity);
   await updateUser(entity.data);
-  // console.log("update successful");
-  // console.log(`Listing created: ${entity.data}`);
   return entity.data;
 }
 

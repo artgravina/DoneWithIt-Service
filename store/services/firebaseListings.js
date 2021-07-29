@@ -44,7 +44,7 @@ async function getListings() {
   });
   const response = await datastore.runQuery(query);
   // 0 is data, 1 is moreResults, etc
-  debugListings(response[0]);
+  // debugListings(response[0]);
   return response[0]; // just the data
 }
 
