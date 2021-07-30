@@ -24,9 +24,7 @@ async function getListing(listingId) {
   const kind = listingEntity;
   const id = datastore.int(listingId);
   const listingKey = datastore.key([kind, id]);
-  console.log("get listingKey: ", listingKey);
   const [listing] = await datastore.get(listingKey);
-  console.log("listing get 1: ", listing);
   return listing;
 }
 
