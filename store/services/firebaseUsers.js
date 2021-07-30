@@ -22,7 +22,6 @@ async function getUser(userId) {
   const kind = userEntity;
   const id = datastore.int(userId);
   const userKey = datastore.key([kind, id]);
-  console.log("get userKey: ", userKey);
   const [user] = await datastore.get(userKey);
   return user;
 }
