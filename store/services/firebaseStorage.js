@@ -88,6 +88,7 @@ async function deleteListingImages(listing) {
 
 // will delete both thumb/full for a url
 async function deleteUrlImages(urls) {
+  console.log("deleteUrlImages: ", urls);
   for (const index in urls) {
     const url = urls[index];
     const bucket = storage.bucket(bucketName);

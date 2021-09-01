@@ -1,6 +1,8 @@
 var fs = require("fs");
 const firebaseUsers = require("../store/services/firebaseUsers");
 
+// TODO: create a store for firebaseStorage
+
 const getUsers = async () => {
   const users = await firebaseUsers.getUsers();
   return users;
@@ -20,6 +22,15 @@ const getUserByEmail = async (email) => {
 const addUser = async (user) => {
   const newUser = await firebaseUsers.addUser(user);
   return newUser;
+};
+
+const updateUser = async (user) => {
+  const updatedUser = await firebaseUsers.updateUser(user);
+  return updatedUser;
+};
+
+const deleteUser = async (userId) => {
+  await firebaseUsers.deleteUser(userId);
 };
 
 const addUserSamples = async (usersArray) => {
@@ -52,6 +63,8 @@ module.exports = {
   getUserById,
   getUserByEmail,
   addUser,
+  updateUser,
+  deleteUser,
   addSamples,
   clearUsers,
 };

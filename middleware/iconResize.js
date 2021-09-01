@@ -4,17 +4,17 @@ const firebaseStorage = require("../store/services/firebaseStorage");
 module.exports = async (req, res, next) => {
   const directory = "images";
   let file = req.file;
-  if (!file) {
-    console.error("file is empty: ======", file);
-    // console.log(req);
+  if (file) {
+    file.filename = `${uuid()}_userIcon.jpg`;
+    const bufferOrig = file.buffer;
+    const fullPath = `${directory}/${file.filename}`;
+    console.log("uploading icon: ", file.filename);
+    const urlFull = await firebaseStorage.upload(file, fullPath, {
+      width: 200,
+      quality: 50,
+    });
+    req.filename = file.filename;
   }
-  file.filename = uuid();
-  const bufferOrig = file.buffer;
-  const fullPath = `${directory}/${file.filename}_userIcon.jpg`;
-  const urlFull = await firebaseStorage.upload(file, fullPath, {
-    width: 200,
-    quality: 50,
-  });
-  req.filename = file.filename;
+
   next();
 };
