@@ -1,6 +1,6 @@
 const auth = require("../middleware/auth");
 const express = require("express");
-const firebaseStorage = require("../store/services/firebaseStorage");
+const firebaseStorage = require("../services/firebase/firebaseStorage");
 const router = express.Router();
 const listingStore = require("../store/listings");
 const userStore = require("../store/users");

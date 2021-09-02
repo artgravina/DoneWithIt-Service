@@ -31,7 +31,7 @@ async function getListing(listingId) {
 const debugListings = (listingArray) => {
   console.log("firebase getListings ==============");
   listingArray.forEach((listing) => {
-    console.log(listing.title, listing.price);
+    console.log(listing.title);
   });
   console.log("end ==================");
 };
@@ -42,7 +42,7 @@ async function getListings() {
   });
   const response = await datastore.runQuery(query);
   // 0 is data, 1 is moreResults, etc
-  // debugListings(response[0]);
+  debugListings(response[0]);
   return response[0]; // just the data
 }
 
@@ -80,6 +80,7 @@ async function deleteAll() {
 
 async function updateListing(listing) {
   console.log("updateListing: ", listing);
+  listing.updated = new Date().toJSON();
   const kind = listingEntity;
   const id = datastore.int(listing.id);
   const listingKey = datastore.key([kind, id]);

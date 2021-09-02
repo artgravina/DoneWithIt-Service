@@ -1,5 +1,5 @@
 const uuid = require("react-uuid");
-const firebaseStorage = require("../store/services/firebaseStorage");
+const firebaseStorage = require("../services/firebase/firebaseStorage");
 
 module.exports = async (req, res, next) => {
   const images = [];

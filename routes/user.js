@@ -5,7 +5,7 @@ const usersStore = require("../store/users");
 const listingsStore = require("../store/listings");
 const userMapper = require("../mappers/users");
 const auth = require("../middleware/auth");
-const firebaseStorage = require("../store/services/firebaseStorage");
+const firebaseStorage = require("../services/firebase/firebaseStorage");
 
 router.get("/listings/:id", auth, async (req, res) => {
   const userId = parseInt(req.params.id);

@@ -1,5 +1,5 @@
 var fs = require("fs");
-const firebaseUsers = require("../store/services/firebaseUsers");
+const firebaseUsers = require("../services/firebase/firebaseUsers");
 
 // TODO: create a store for firebaseStorage
 

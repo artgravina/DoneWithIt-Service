@@ -1,4 +1,4 @@
-const firebaseListings = require("../store/services/firebaseListings");
+const firebaseListings = require("../services/firebase/firebaseListings");
 const userStore = require("../store/users");
 var fs = require("fs");
 

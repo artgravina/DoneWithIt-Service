@@ -6,7 +6,7 @@ const usersStore = require("../store/users");
 const userMapper = require("../mappers/users");
 const iconResize = require("../middleware/iconResize");
 const auth = require("../middleware/auth");
-const firebaseStorage = require("../store/services/firebaseStorage");
+const firebaseStorage = require("../services/firebase/firebaseStorage");
 
 const validateWith = require("../middleware/validation");
 const { exist } = require("joi/lib/types/lazy");

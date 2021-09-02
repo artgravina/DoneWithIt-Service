@@ -67,6 +67,7 @@ async function deleteAll() {
 }
 
 async function updateUser(user) {
+  user.updated = new Date().toJSON();
   const kind = userEntity;
   const id = datastore.int(user.id);
   const userKey = datastore.key([kind, id]);
