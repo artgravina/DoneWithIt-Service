@@ -9,7 +9,7 @@ const auth = require("../middleware/auth");
 
 const schema = {
   email: Joi.string().email().required(),
-  password: Joi.string().required().min(5),
+  password: Joi.string().required().min(4),
 };
 
 const tokenize = (user) => {

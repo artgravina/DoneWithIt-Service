@@ -1,5 +1,5 @@
 const uuid = require("react-uuid");
-const firebaseStorage = require("../services/firebase/firebaseStorage");
+const storage = require("../store/storage");
 
 module.exports = async (req, res, next) => {
   const images = [];
@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
     file.filename = uuid();
     const bufferOrig = file.buffer;
     const fullPath = `${directory}/${file.filename}_full.jpg`;
-    const urlFull = await firebaseStorage.upload(file, fullPath, {
+    const urlFull = await storage.upload(file, fullPath, {
       width: 2000,
       quality: 50,
     });
@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
     // restore original buffer
     file.buffer = bufferOrig;
     const thumbPath = `${directory}/${file.filename}_thumb.jpg`;
-    const urlThumb = await firebaseStorage.upload(file, thumbPath, {
+    const urlThumb = await storage.upload(file, thumbPath, {
       width: 100,
       quality: 30,
     });

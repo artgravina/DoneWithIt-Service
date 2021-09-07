@@ -1,8 +1,6 @@
 var fs = require("fs");
 const firebaseUsers = require("../services/firebase/firebaseUsers");
 
-// TODO: create a store for firebaseStorage
-
 const getUsers = async () => {
   const users = await firebaseUsers.getUsers();
   return users;

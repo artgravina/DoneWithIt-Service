@@ -26,12 +26,12 @@ async function getUser(userId) {
   return user;
 }
 
-async function getUsers() {
-  const query = datastore.createQuery(userEntity);
-  const response = await datastore.runQuery(query);
-  // 0 is data, 1 is moreResults, etc
-  return response[0]; // just the data
-}
+// async function getUsers() {
+//   const query = datastore.createQuery(userEntity);
+//   const response = await datastore.runQuery(query);
+//   // 0 is data, 1 is moreResults, etc
+//   return response[0]; // just the data
+// }
 
 async function getUserByEmail(email) {
   const query = datastore
@@ -89,33 +89,11 @@ const user2 = {
   email: "john@domain.com",
   password: "12345",
 };
-async function test() {
-  try {
-    // const user1data = await addUser(user1);
-    // console.log("addedUser: ", user1data);
-    // const user2data = await addUser(user2);
-    // console.log("addedUser: ", user2data);
-    // let userbyget = await getUser(user1data.id);
-    // console.log("getUser: ", userbyget);
-    const userbyemail = await getUserByEmail("john@domain.com");
-    console.log("email user", userbyemail);
-    userbyemail.name = "Arthur";
-    await updateUser(userbyemail);
-    const users = await getUsers();
-    users.forEach((user) => {
-      console.log(user.id);
-    });
-  } catch (err) {
-    console.error("ERROR:", err);
-  }
-}
 
 module.exports = {
-  test,
   addUser,
   getUser,
   getUserByEmail,
-  getUsers,
   deleteUser,
   deleteAll,
   updateUser,

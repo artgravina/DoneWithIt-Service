@@ -1,5 +1,5 @@
 const uuid = require("react-uuid");
-const firebaseStorage = require("../services/firebase/firebaseStorage");
+const storage = require("../store/storage");
 
 module.exports = async (req, res, next) => {
   const directory = "images";
@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
     const bufferOrig = file.buffer;
     const fullPath = `${directory}/${file.filename}`;
     console.log("uploading icon: ", file.filename);
-    const urlFull = await firebaseStorage.upload(file, fullPath, {
+    const urlFull = await storage.upload(file, fullPath, {
       width: 200,
       quality: 50,
     });

@@ -6,7 +6,7 @@ const usersStore = require("../store/users");
 const userMapper = require("../mappers/users");
 const iconResize = require("../middleware/iconResize");
 const auth = require("../middleware/auth");
-const firebaseStorage = require("../services/firebase/firebaseStorage");
+const storage = require("../store/storage");
 
 const validateWith = require("../middleware/validation");
 const { exist } = require("joi/lib/types/lazy");
@@ -21,7 +21,7 @@ const multer = Multer({
 const schemaPost = {
   name: Joi.string().required().min(2),
   email: Joi.string().email().required(),
-  password: Joi.string().required().min(5),
+  password: Joi.string().required().min(4),
   userIcon: Joi.string().optional(),
   deleteOrigIcon: Joi.boolean().optional(),
 };
@@ -63,6 +63,7 @@ const schemaUpdate = {
   userIcon: Joi.string().optional(),
   deleteOrigIcon: Joi.boolean().optional(),
 };
+
 router.put(
   "/:id",
   auth,
@@ -85,7 +86,7 @@ router.put(
     if (deleteOrigIcon === true) {
       // we have to delete old one\
       console.log("Delete Prior icon: ", updatedUser.icon);
-      await firebaseStorage.deleteFile(updatedUser.icon);
+      await storage.deleteFile(updatedUser.icon);
     }
 
     // add our new icon if there
@@ -99,4 +100,27 @@ router.put(
   }
 );
 
+const schemaPassword = {
+  userId: Joi.string().required(),
+  password: Joi.string().required().min(4),
+};
+
+router.post(
+  "/password",
+  auth,
+  [validateWith(schemaPassword)],
+
+  async (req, res) => {
+    const userId = req.body.userId;
+    const updatedUser = await usersStore.getUserById(userId);
+    if (!updatedUser) {
+      return res.status(400).send({ error: "User is not on file." });
+    }
+
+    updatedUser.password = req.body.password;
+    await usersStore.updateUser(updatedUser);
+
+    res.status(201).send(updatedUser);
+  }
+);
 module.exports = router;

@@ -1,5 +1,5 @@
 const express = require("express");
-const firebaseStorage = require("../services/firebase/firebaseStorage");
+const storage = require("../store/storage");
 const router = express.Router();
 
 const store = require("../store/listings");
@@ -17,7 +17,7 @@ router.delete("/:id", auth, async (req, res) => {
   console.log("listing delete", req.params.id);
   const listing = await store.getListing(parseInt(req.params.id));
   if (!listing) return res.status(404).send({ error: "listing not on file." });
-  const iresp = await firebaseStorage.deleteListingImages(listing);
+  const iresp = await storage.deleteListingImages(listing);
   const respListing = await store.deleteListing(listing.id);
   res.send("delete ok");
 });

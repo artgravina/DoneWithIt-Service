@@ -5,7 +5,7 @@ const usersStore = require("../store/users");
 const listingsStore = require("../store/listings");
 const userMapper = require("../mappers/users");
 const auth = require("../middleware/auth");
-const firebaseStorage = require("../services/firebase/firebaseStorage");
+const storage = require("../store/storage");
 
 router.get("/listings/:id", auth, async (req, res) => {
   const userId = parseInt(req.params.id);
@@ -34,10 +34,10 @@ router.delete("/:id", auth, async (req, res) => {
 
   for (const index in listingsArray) {
     const listing = listingsArray[index];
-    const iresp = await firebaseStorage.deleteListingImages(listing);
+    const iresp = await storage.deleteListingImages(listing);
     await listingsStore.deleteListing(listing.id);
   }
-  await firebaseStorage.deleteFile(user.icon);
+  await storage.deleteFile(user.icon);
   await usersStore.deleteUser(user.id);
   res.send(`user deleted ok: ${user.name}`);
 });

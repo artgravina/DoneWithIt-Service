@@ -14,6 +14,7 @@ const imagesPath = "images/";
 // params.size is the width you want converted to: i.e. thumbnail = 100, regular = 600
 // params.quality is the image quality you desire
 // if size = null no conversion
+// returns the public url or error message
 const upload = async (file, path, params) => {
   const newImageBuffer = await sharp(file.buffer)
     .resize(params.width)
@@ -140,11 +141,8 @@ async function addSamples() {
 
 module.exports = {
   upload,
-  listImages,
-  deleteImages,
   deleteFile,
   deleteListingImages,
-  deleteUrlImages,
-  clearAllImages,
   addSamples,
+  clearAllImages,
 };

@@ -10,7 +10,7 @@ const imageResize = require("../middleware/imageResize");
 const store = require("../store/listings");
 const listingMapper = require("../mappers/listings");
 const validateWith = require("../middleware/validation");
-const firebaseStorage = require("../services/firebase/firebaseStorage");
+const storage = require("../store/storage");
 
 // Multer is required to process file uploads and make them available via
 // req.files.
@@ -139,7 +139,7 @@ router.put(
     console.log(deletedFilenames, deletedFilenames.length);
     for (const index in deletedFilenames) {
       const filename = deletedFilenames[index];
-      await firebaseStorage.deleteFile(filename);
+      await storage.deleteFile(filename);
     }
 
     console.log(listing.images);
