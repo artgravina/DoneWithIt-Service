@@ -1,7 +1,5 @@
-const config = require("config");
-
 const mapper = (listing) => {
-  const baseUrl = config.get("imagesBaseUrl");
+  const baseUrl = process.env.BASE_IMAGE_URL;
   const mapImage = (image) => ({
     url: `${baseUrl}${image.fileName}_full.jpg`,
     thumbnailUrl: `${baseUrl}${image.fileName}_thumb.jpg`,

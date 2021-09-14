@@ -10,7 +10,9 @@ const storage = require("../store/storage");
 router.get("/listings/:id", auth, async (req, res) => {
   const userId = parseInt(req.params.id);
   const user = await usersStore.getUserById(userId);
-  if (!user) return res.status(404).send();
+  if (!user) {
+    return res.status(404).send({ error: "A user with that id not found!" });
+  }
   const listingsArray = await listingsStore.getUserListings(user.id);
   user.listings = listingsArray ? listingsArray.length : 0;
   const resource = userMapper(user);

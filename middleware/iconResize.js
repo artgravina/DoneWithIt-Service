@@ -6,10 +6,8 @@ module.exports = async (req, res, next) => {
   let file = req.file;
   if (file) {
     file.filename = `${uuid()}_userIcon.jpg`;
-    const bufferOrig = file.buffer;
-    const fullPath = `${directory}/${file.filename}`;
     console.log("uploading icon: ", file.filename);
-    const urlFull = await storage.upload(file, fullPath, {
+    const urlFull = await storage.upload(file, file.filename, {
       width: 200,
       quality: 50,
     });

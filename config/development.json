@@ -1,6 +1,0 @@
-{
-  "imagesBaseUrl": "https://storage.googleapis.com/doneimages/images/",
-  "maxImageCount": 3,
-  "port": 8080,
-  "GCLOUD_STORAGE_BUCKET": "doneimages"
-}

@@ -1,4 +1,5 @@
 const express = require("express");
+const dotenv = require("dotenv");
 const categories = require("./routes/categories");
 const listings = require("./routes/listings");
 const listing = require("./routes/listing");
@@ -13,7 +14,6 @@ const loadSamples = require("./routes/loadSamples");
 const userStore = require("./store/users");
 const helmet = require("helmet");
 const compression = require("compression");
-const config = require("config");
 const app = express();
 
 app.use(express.static("public"));
@@ -33,14 +33,26 @@ app.use("/api/messages", messages);
 app.use("/api/initialize", loadSamples);
 app.use("/test", test);
 
-const port = process.env.PORT || config.get("port");
+const initProcessEnv = () => {
+  dotenv.config({ path: "./config/.env" }); // load env
+  console.log(process.env.NODE_ENV);
+  if (process.env.NODE_ENV === "development") {
+    dotenv.config({ path: "./config/development.env" });
+    console.log("developemtn stuff");
+    console.log(process.env.PORT);
+    console.log(process.env.BASE_IMAGE_URL);
+  }
+  console.log("end init");
+};
 
 // make sure we always have our base users available. Will not add if already there.
 const startup = async () => {
+  initProcessEnv();
   await userStore.addSamples();
+  const port = process.env.PORT;
   app.listen(port, function () {
-    console.log(`Server started on port ${port}...`);
-    console.log(config.get("imagesBaseUrl"));
+    console.log(`Server started at port: ${port}}....`);
+    console.log("NODE_ENV: ", process.env.NODE_ENV);
   });
 };
 

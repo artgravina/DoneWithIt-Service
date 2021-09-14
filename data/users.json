@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "name": "Mosh Tue 1203",
+        "email": "mosh@domain.com",
+        "password": "12345",
+        "updated": "2021-09-14T16:03:43.067Z",
+        "icon": "66c581a-f502-8d0e-d330-1d1d110bff13_userIcon.jpg"
+    },
+    {
+        "id": 2,
+        "name": "John",
+        "email": "john@domain.com",
+        "password": "12345"
+    }
+]

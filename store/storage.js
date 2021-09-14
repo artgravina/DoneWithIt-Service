@@ -1,4 +1,4 @@
-const storage = require("../services/firebase/firebaseStorage");
+const storage = require("../services/json-server/jsonStorage");
 
 // file is standard File object resulting in html upload
 // path is complete path i.e. /folder/filename

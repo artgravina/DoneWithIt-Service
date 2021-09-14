@@ -53,8 +53,9 @@ router.post(
   }
 );
 
-router.get("/", (req, res) => {
-  res.send(usersStore.getUsers());
+router.get("/", async (req, res) => {
+  const users = await usersStore.getUsers();
+  res.status(201).send(users);
 });
 
 const schemaUpdate = {
@@ -77,11 +78,9 @@ router.put(
     if (!updatedUser) {
       return res.status(400).send({ error: "User is not on file." });
     }
-    const deleteOrigIcon = req.body.deleteOrigIcon;
+    const deleteOrigIcon = JSON.parse(req.body.deleteOrigIcon);
     updatedUser.name = req.body.name;
     updatedUser.email = req.body.email;
-    const oldIcon = updatedUser.icon;
-    const newIcon = req.body.userIcon;
 
     if (deleteOrigIcon === true) {
       // we have to delete old one\

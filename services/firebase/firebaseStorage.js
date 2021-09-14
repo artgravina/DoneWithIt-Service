@@ -5,7 +5,8 @@ const sharp = require("sharp");
 
 const storage = new Storage();
 // A bucket is a container for objects (files).
-const bucketName = process.env.GCLOUD_STORAGE_BUCKET || "doneimages";
+const imagesBaseUrl = process.env.BASE_IMAGE_URL;
+const bucketName = process.env.GCLOUD_STORAGE_BUCKET;
 const bucket = storage.bucket(bucketName);
 const imagesPath = "images/";
 
@@ -36,7 +37,7 @@ const upload = async (file, path, params) => {
         reject(`Unable to upload image ${err.message}`);
       })
       .on("finish", async () => {
-        const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+        const publicUrl = `${imagesBaseUrl}/${bucket.name}/${blob.name}`;
 
         resolve(publicUrl);
       })

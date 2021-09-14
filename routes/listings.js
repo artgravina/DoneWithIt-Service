@@ -5,7 +5,6 @@ const router = express.Router();
 
 const auth = require("../middleware/auth");
 const categoriesStore = require("../store/categories");
-const config = require("config");
 const imageResize = require("../middleware/imageResize");
 const store = require("../store/listings");
 const listingMapper = require("../mappers/listings");
@@ -64,7 +63,7 @@ router.post(
     // stored in the uploads folder. We'll need to clean up this folder
     // using a separate process.
     // auth,
-    upload.array("images", config.get("maxImageCount")),
+    upload.array("images", process.env.MAX_IMAGE_COUNT),
     validateWith(schema),
     validateCategoryId,
     imageResize,
@@ -100,7 +99,7 @@ router.put(
     // using a separate process.
     // auth,
 
-    upload.array("images", config.get("maxImageCount")),
+    upload.array("images", process.env.MAX_IMAGE_COUNT),
     validateWith(schema),
     validateCategoryId,
     imageResize,

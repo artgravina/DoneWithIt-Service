@@ -1,8 +1,10 @@
-const config = require("config");
-
 const mapper = (user) => {
-  const baseUrl = config.get("imagesBaseUrl");
-  const iconUrl = user.icon ? `${baseUrl}${user.icon}` : null;
+  const baseUrl = process.env.BASE_IMAGE_URL;
+  const port = process.env.PORT;
+  const directory = "images";
+  const iconUrl = user.icon
+    ? `${baseUrl}:${port}/${directory}/${user.icon}`
+    : null;
 
   return {
     ...user,

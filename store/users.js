@@ -1,42 +1,44 @@
 var fs = require("fs");
-const firebaseUsers = require("../services/firebase/firebaseUsers");
+// const userService = require("../services/firebase/firebaseUsers");
+const userService = require("../services/json-server/jsonusers");
 
 const getUsers = async () => {
-  const users = await firebaseUsers.getUsers();
+  const users = await userService.getUsers();
   return users;
 };
 
 const getUserById = async (id) => {
-  const user = await firebaseUsers.getUser(id);
+  const user = await userService.getUser(id);
+  console.log("user: ", user);
   return user;
 };
 
 // the user is our id since it must be unique.
 const getUserByEmail = async (email) => {
-  const user = await firebaseUsers.getUserByEmail(email);
+  const user = await userService.getUserByEmail(email);
   return user;
 };
 
 const addUser = async (user) => {
-  const newUser = await firebaseUsers.addUser(user);
+  const newUser = await userService.addUser(user);
   return newUser;
 };
 
 const updateUser = async (user) => {
-  const updatedUser = await firebaseUsers.updateUser(user);
+  const updatedUser = await userService.updateUser(user);
   return updatedUser;
 };
 
 const deleteUser = async (userId) => {
-  await firebaseUsers.deleteUser(userId);
+  await userService.deleteUser(userId);
 };
 
 const addUserSamples = async (usersArray) => {
   for (const index in usersArray) {
     const user = usersArray[index];
-    const userFound = await firebaseUsers.getUserByEmail(user.email);
+    const userFound = await userService.getUserByEmail(user.email);
     if (!userFound) {
-      const newuser = await firebaseUsers.addUser(user);
+      const newuser = await userService.addUser(user);
     }
   }
 };
@@ -53,7 +55,7 @@ const addSamples = async () => {
 };
 
 const clearUsers = async () => {
-  await firebaseUsers.deleteAll();
+  await userService.deleteAll();
 };
 
 module.exports = {
