@@ -2,15 +2,15 @@ const auth = require("../middleware/auth");
 const express = require("express");
 const storage = require("../store/storage");
 const router = express.Router();
-const listingStore = require("../store/listings");
-const userStore = require("../store/users");
+const listingsStore = require("../store/listings");
+const usersStore = require("../store/users");
 
 router.get("/", auth, async (req, res) => {
   try {
-    await userStore.clearUsers();
-    await userStore.addSamples();
-    await listingStore.clearListings();
-    const numListings = await listingStore.addSamples();
+    await usersStore.clearUsers();
+    await usersStore.addSamples();
+    await listingsStore.clearListings();
+    const numListings = await listingsStore.addSamples();
     await storage.clearAllImages();
     await storage.addSamples();
 

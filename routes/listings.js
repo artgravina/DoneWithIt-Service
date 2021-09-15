@@ -108,7 +108,7 @@ router.put(
   async (req, res) => {
     console.log("updateListings");
     const listing = {
-      id: parseInt(req.params.id),
+      id: req.params.id,
       title: req.body.title,
       price: parseFloat(req.body.price),
       categoryId: parseInt(req.body.categoryId),

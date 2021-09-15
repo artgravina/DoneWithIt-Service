@@ -1,5 +1,6 @@
-const firebaseListings = require("../services/firebase/firebaseListings");
-const userStore = require("../store/users");
+// TODO: make this dynamic to choose the appropriate service
+const listingsService = require("../services/json-server/jsonListings");
+const usersStore = require("../store/users");
 var fs = require("fs");
 
 const listingsSample = [
@@ -109,29 +110,29 @@ const listingsSample = [
 ];
 
 const addListing = async (listing) => {
-  const newListing = await firebaseListings.addListing(listing);
+  const newListing = await listingsService.addListing(listing);
   // return newListing;
 };
 
 const getListings = async () => {
-  return await firebaseListings.getListings();
+  return await listingsService.getListings();
 };
 
 const getUserListings = async (userId) => {
-  return await firebaseListings.getUserListings(userId);
+  return await listingsService.getUserListings(userId);
 };
 
 const getListing = async (id) => {
-  const listing = await firebaseListings.getListing(id);
+  const listing = await listingsService.getListing(id);
   return listing;
 };
 
 const updateListing = async (listing) => {
-  const resp = await firebaseListings.updateListing(listing);
+  const resp = await listingsService.updateListing(listing);
 };
 
 const deleteListing = async (id) => {
-  const response = await firebaseListings.deleteListing(id);
+  const response = await listingsService.deleteListing(id);
 };
 
 const addSamples = async () => {
@@ -141,20 +142,20 @@ const addSamples = async () => {
     const listingOrig = listingsArray[index];
     const { userEmail, ...listingNew } = listingOrig;
 
-    const user = await userStore.getUserByEmail(userEmail);
+    const user = await usersStore.getUserByEmail(userEmail);
     let userId = 0;
     if (user) {
       userId = user.id;
     }
     listingNew.userId = userId;
 
-    const newListing = await firebaseListings.addListing(listingNew);
+    const newListing = await listingsService.addListing(listingNew);
     console.log("listingId: ", newListing.id, newListing.userId);
   }
 };
 
 const clearListings = async () => {
-  await firebaseListings.deleteAll();
+  await listingsService.deleteAll();
 };
 
 module.exports = {

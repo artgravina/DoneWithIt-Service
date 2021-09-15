@@ -1,8 +1,11 @@
 const mapper = (listing) => {
   const baseUrl = process.env.BASE_IMAGE_URL;
+  const port = process.env.PORT;
+  const directory = "images";
+  const publicUrlBase = `${baseUrl}:${port}/${directory}/`;
   const mapImage = (image) => ({
-    url: `${baseUrl}${image.fileName}_full.jpg`,
-    thumbnailUrl: `${baseUrl}${image.fileName}_thumb.jpg`,
+    url: `${publicUrlBase}${image.fileName}_full.jpg`,
+    thumbnailUrl: `${publicUrlBase}${image.fileName}_thumb.jpg`,
   });
 
   return {

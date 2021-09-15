@@ -22,9 +22,14 @@ async function addSamples() {
   await storage.addSamples();
 }
 
+async function clearAllImages() {
+  await storage.clearAllImages();
+}
+
 module.exports = {
   upload,
   deleteFile,
   deleteListingImages,
   addSamples,
+  clearAllImages,
 };

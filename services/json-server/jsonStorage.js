@@ -1,11 +1,7 @@
 var fs = require("fs");
-var path = require("path");
 const sharp = require("sharp");
 
 const imagesPath = "./public";
-const port = process.env.PORT;
-const baseUrl = process.env.BASE_IMAGE_URL;
-const directory = "images";
 
 // file is standard File object resulting in html upload
 // filename is name of image
@@ -14,6 +10,9 @@ const directory = "images";
 // if size = null no conversion
 // returns the public url or error message
 const upload = async (file, filename, params) => {
+  const port = process.env.PORT;
+  const baseUrl = process.env.BASE_IMAGE_URL;
+  const directory = "images";
   const outputFile = `${imagesPath}/${directory}/${filename}`;
   const publicUrl = `${baseUrl}:${port}/${directory}/${filename}`;
   console.log("outputFile: ", outputFile);
@@ -87,37 +86,39 @@ async function deleteUrlImages(urls) {
 }
 
 async function clearAllImages() {
-  // await deleteImages(imagesPath);
+  const dirPath = `${imagesPath}/${directory}`;
+  const files = fs.readdirSync(dirPath);
+
+  files.forEach(function (file) {
+    try {
+      const filePath = dirPath + "/" + file;
+      console.log("filePath: ", filePath);
+      fs.unlinkSync(filePath);
+      //file removed
+    } catch (err) {
+      console.error(err);
+    }
+  });
 }
 
 async function addSamples() {
-  // const bucket = storage.bucket(bucketName);
-  // var moveFrom = "./uploads/sample_images";
-  // console.log("addSample Images");
-  // // Loop through all the files in the temp directory
-  // fs.readdir(moveFrom, async function (err, files) {
-  //   if (err) {
-  //     console.error("Could not list the directory.", err);
-  //     return;
-  //   }
-  //   let uploadFiles = [];
-  //   files.forEach(function (file, index) {
-  //     // Make one pass and make the file complete
-  //     const fromPath = path.join(moveFrom, file);
-  //     const filename = fromPath.split("/").pop();
-  //     const destination = `${imagesPath}${filename}`;
-  //     uploadFiles.push({ destination: destination, fromPath: fromPath });
-  //   });
-  //   for (const uploadFile of uploadFiles) {
-  //     const { destination, fromPath } = uploadFile;
-  //     const options = {
-  //       destination: destination,
-  //       public: true,
-  //     };
-  //     const imageFile = await bucket.upload(fromPath, options);
-  //   }
-  //   return;
-  // });
+  var samplesDir = "./uploads/sample_images";
+  console.log("addSample Images");
+  const outDir = `${imagesPath}/${directory}`;
+  const files = fs.readdirSync(samplesDir);
+
+  files.forEach(async function (file) {
+    try {
+      const fromPath = samplesDir + "/" + file;
+      const toPath = outDir + "/" + file;
+      const buffer = fs.readFileSync(fromPath);
+      const data = await sharp(buffer).toFile(toPath);
+      console.log("uploaded: ", toPath);
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+    }
+  });
 }
 
 module.exports = {

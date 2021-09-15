@@ -28,7 +28,7 @@ const schemaPost = {
 
 router.post(
   "/",
-  // following uploads to firebase and adds filename to req
+  // following uploads to data store and adds filename to req
   [multer.single("userIcon"), validateWith(schemaPost), iconResize],
 
   async (req, res) => {
@@ -72,7 +72,8 @@ router.put(
 
   async (req, res) => {
     console.log("updateUser start");
-    const userId = parseInt(req.params.id);
+    const userId = req.params.id;
+    console.log("userId: ", userId);
 
     const updatedUser = await usersStore.getUserById(userId);
     if (!updatedUser) {

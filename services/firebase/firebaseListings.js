@@ -29,7 +29,7 @@ async function getListing(listingId) {
 }
 
 const debugListings = (listingArray) => {
-  console.log("firebase getListings ==============");
+  console.log("getListings ==============");
   listingArray.forEach((listing) => {
     console.log(listing.title);
   });
@@ -42,7 +42,7 @@ async function getListings() {
   });
   const response = await datastore.runQuery(query);
   // 0 is data, 1 is moreResults, etc
-  debugListings(response[0]);
+  // debugListings(response[0]);
   return response[0]; // just the data
 }
 
@@ -92,70 +92,7 @@ async function updateListing(listing) {
   await datastore.update(entity);
 }
 
-const listing1 = {
-  title: "Red jacket",
-  images: [{ fileName: "jacket1" }],
-  price: 100,
-  categoryId: 5,
-  userEmail: "mosh@domain.com",
-  location: {
-    latitude: 37.78825,
-    longitude: -122.4324,
-  },
-};
-const listing2 = {
-  title: "Gray couch in a great condition",
-  images: [{ fileName: "couch2" }],
-  categoryId: 1,
-  price: 1200,
-  userEmail: "john@domain.com",
-  location: {
-    latitude: 37.78825,
-    longitude: -122.4324,
-  },
-};
-
-async function test() {
-  try {
-    console.log("firebaseListing.test");
-    let response1 = await addListing(listing1);
-    console.log("1: ", response1);
-    let response2 = await addListing(listing2);
-    console.log("2: ", response2);
-    let listing = await getListing(response1.id);
-    console.log("listing: ", listing);
-
-    // await deleteAll();
-    // let response1 = await addListing(listing1);
-    // console.log("1: ", response1);
-    // let response2 = await addListing(listing2);
-    // console.log("2: ", response2);
-    // let listing = await getListing(response1.id);
-    // console.log("listing: ", listing);
-    // listing.name = "Arthur";
-    // const resp = await updateListing(listing);
-    // console.log("update resp: ", resp);
-    // const id = 5683780991844352;
-    // const response = await deleteListing(id);
-    // console.log(`listing ${id} deleted: ${response}`);
-    // const listings = await getListings();
-    // listings.forEach((listing) => {
-    //   console.log("all: ", listing.id);
-    // });
-  } catch (err) {
-    console.error("ERROR:", err);
-  }
-}
-
-// async function test2() {
-//   console.log("begin testing");
-//   await listing.clearListings();
-//   await listing.addSamples();
-//   console.log("listings cleared");
-// }
-
 module.exports = {
-  test,
   addListing,
   getListing,
   getListings,

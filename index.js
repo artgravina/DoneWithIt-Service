@@ -11,7 +11,7 @@ const messages = require("./routes/messages");
 const expoPushTokens = require("./routes/expoPushTokens");
 const test = require("./routes/testing");
 const loadSamples = require("./routes/loadSamples");
-const userStore = require("./store/users");
+const usersStore = require("./store/users");
 const helmet = require("helmet");
 const compression = require("compression");
 const app = express();
@@ -48,7 +48,7 @@ const initProcessEnv = () => {
 // make sure we always have our base users available. Will not add if already there.
 const startup = async () => {
   initProcessEnv();
-  await userStore.addSamples();
+  await usersStore.addSamples();
   const port = process.env.PORT;
   app.listen(port, function () {
     console.log(`Server started at port: ${port}}....`);

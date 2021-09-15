@@ -41,7 +41,7 @@ router.post("/", [auth, validateWith(schema)], async (req, res) => {
   const listing = listingsStore.getListing(listingId);
   if (!listing) return res.status(400).send({ error: "Invalid listingId." });
 
-  const targetUser = usersStore.getUserById(parseInt(listing.userId));
+  const targetUser = usersStore.getUserById(listing.userId);
   if (!targetUser) return res.status(400).send({ error: "Invalid userId." });
 
   messagesStore.add({
