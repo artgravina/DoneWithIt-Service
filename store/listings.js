@@ -1,5 +1,12 @@
-// TODO: make this dynamic to choose the appropriate service
-const listingsService = require("../services/json-server/jsonListings");
+let listingsService;
+if (process.env.IS_JSON_SERVER) {
+  listingsService = require("../services/json-server/jsonListings");
+} else if (process.env.IS_GCLOUD_SERVER) {
+  listingsService = require("../services/firebase/firebaseListings");
+} else {
+  console.log("no listing service available!");
+}
+
 const usersStore = require("../store/users");
 var fs = require("fs");
 

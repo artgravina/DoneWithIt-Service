@@ -2,7 +2,6 @@ const fs = require("fs");
 const uuid = require("react-uuid");
 
 const dataPath = "./data/listings.json";
-console.log("dataPath: ", dataPath);
 
 function readFile(path) {
   return new Promise(function (resolve, reject) {
@@ -41,7 +40,6 @@ async function getListing(listingId) {
   try {
     const data = await readFile(dataPath);
     const listing = data.find((listing) => listing.id === listingId);
-    console.log(listing);
     return listing;
   } catch (error) {
     console.error(error.message);
@@ -60,7 +58,7 @@ const debugListings = (listingArray) => {
 async function getListings() {
   try {
     const data = await readFile(dataPath);
-    // console.log(debugListings(data));
+    debugListings(data);
     return data;
   } catch (error) {
     console.error(error.message);

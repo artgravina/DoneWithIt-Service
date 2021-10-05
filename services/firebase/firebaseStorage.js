@@ -2,13 +2,16 @@ var fs = require("fs");
 var path = require("path");
 const { Storage } = require("@google-cloud/storage");
 const sharp = require("sharp");
+const imageSettings = require("../../config/settings");
+
+console.log("firebaseStorage settings: ", imageSettings);
 
 const storage = new Storage();
 // A bucket is a container for objects (files).
-const imagesBaseUrl = process.env.BASE_IMAGE_URL;
-const bucketName = process.env.GCLOUD_STORAGE_BUCKET;
+const baseUrl = imageSettings.baseUrl;
+const bucketName = imageSettings.bucketName;
 const bucket = storage.bucket(bucketName);
-const imagesPath = "images/";
+const directory = imageSettings.directory;
 
 // file is standard File object resulting in html upload
 // path is complete path i.e. /folder/filename
@@ -17,6 +20,8 @@ const imagesPath = "images/";
 // if size = null no conversion
 // returns the public url or error message
 const upload = async (file, path, params) => {
+  const imagePath = `${directory}/${path}`;
+  console.log("firebaseStorage: upload: ", imagePath, params);
   const newImageBuffer = await sharp(file.buffer)
     .resize(params.width)
     .jpeg({ quality: params.quality })
@@ -24,10 +29,10 @@ const upload = async (file, path, params) => {
 
   file.buffer = newImageBuffer;
 
-  const { originalname, buffer } = file;
+  const { buffer } = file;
 
   const promise = new Promise((resolve, reject) => {
-    const blob = bucket.file(path);
+    const blob = bucket.file(imagePath);
     const blobStream = blob.createWriteStream({
       resumable: false,
       public: true,
@@ -37,7 +42,7 @@ const upload = async (file, path, params) => {
         reject(`Unable to upload image ${err.message}`);
       })
       .on("finish", async () => {
-        const publicUrl = `${imagesBaseUrl}/${bucket.name}/${blob.name}`;
+        const publicUrl = `${baseUrl}/${bucket.name}/${blob.name}`;
 
         resolve(publicUrl);
       })
@@ -47,26 +52,30 @@ const upload = async (file, path, params) => {
 };
 
 async function listImages(path) {
+  console.log("listImages: ", path);
   const bucket = storage.bucket(bucketName);
   const [files] = await bucket.getFiles({
     delimiter: "/",
-    prefix: path,
+    prefix: `${path}`,
   });
+  console.log("files: ", files);
   let filenames = [];
   files.forEach((file) => {
     filenames.push(file.name);
   });
+  console.log("filenames: ", filenames);
   return filenames;
 }
 
 //  delete all images with this prefix
 async function deleteImages(path) {
   console.log("deleteImages", path);
+
   const bucket = storage.bucket(bucketName);
   return await bucket.deleteFiles(
     {
       delimiter: "/",
-      prefix: path,
+      prefix: `${path}`,
     },
     function (err) {
       if (err) console.log("deleteImages", err.message);
@@ -75,12 +84,11 @@ async function deleteImages(path) {
 }
 
 async function deleteFile(filename) {
-  const path = `${imagesPath}${filename}`;
-  const resp = await deleteImages(path);
+  const path = `${directory}/${filename}`;
+  await deleteImages(path);
 }
 
 async function deleteListingImages(listing) {
-  const bucket = storage.bucket(bucketName);
   for (const index in listing.images) {
     let filename = listing.images[index].fileName;
     await deleteFile(filename);
@@ -93,7 +101,6 @@ async function deleteUrlImages(urls) {
   console.log("deleteUrlImages: ", urls);
   for (const index in urls) {
     const url = urls[index];
-    const bucket = storage.bucket(bucketName);
     const fullname = url.split("/").pop();
     const filename = fullname.substr(0, fullname.lastIndexOf("."));
     await deleteFile(filename);
@@ -102,7 +109,14 @@ async function deleteUrlImages(urls) {
 }
 
 async function clearAllImages() {
-  await deleteImages(imagesPath);
+  console.log("firebaseStorge: ", directory);
+
+  await bucket.deleteFiles({ prefix: `${directory}/` }).then(function (err) {
+    if (err.length > 0) {
+      console.log("not all storage iamges deleted");
+      console.log(err);
+    }
+  });
 }
 
 async function addSamples() {
@@ -122,7 +136,7 @@ async function addSamples() {
       // Make one pass and make the file complete
       const fromPath = path.join(moveFrom, file);
       const filename = fromPath.split("/").pop();
-      const destination = `${imagesPath}${filename}`;
+      const destination = `${directory}/${filename}`;
       uploadFiles.push({ destination: destination, fromPath: fromPath });
     });
 
@@ -146,4 +160,6 @@ module.exports = {
   deleteListingImages,
   addSamples,
   clearAllImages,
+  listImages,
+  deleteImages,
 };

@@ -1,7 +1,14 @@
 var fs = require("fs");
 
 // TODO: make this dynamic to choose the appropriate service
-const usersService = require("../services/json-server/jsonUsers");
+let usersService;
+if (process.env.IS_JSON_SERVER) {
+  usersService = require("../services/json-server/jsonUsers");
+} else if (process.env.IS_GCLOUD_SERVER) {
+  usersService = require("../services/firebase/firebaseUsers");
+} else {
+  console.log("no users service available!");
+}
 
 const getUsers = async () => {
   const users = await usersService.getUsers();

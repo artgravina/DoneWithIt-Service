@@ -14,7 +14,6 @@ router.get("/:id", auth, (req, res) => {
 });
 
 router.delete("/:id", auth, async (req, res) => {
-  console.log("listing delete", req.params.id);
   const listing = await store.getListing(req.params.id);
   if (!listing) return res.status(404).send({ error: "listing not on file." });
   const iresp = await storage.deleteListingImages(listing);

@@ -2,7 +2,6 @@ const uuid = require("react-uuid");
 const storage = require("../store/storage");
 
 module.exports = async (req, res, next) => {
-  const directory = "images";
   let file = req.file;
   if (file) {
     file.filename = `${uuid()}_userIcon.jpg`;

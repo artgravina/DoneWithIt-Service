@@ -3,7 +3,6 @@ const storage = require("../store/storage");
 
 module.exports = async (req, res, next) => {
   const images = [];
-  const directory = "images";
 
   const resizePromises = req.files.map(async (file) => {
     file.filename = uuid();

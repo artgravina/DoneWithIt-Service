@@ -2,7 +2,6 @@ const fs = require("fs");
 const uuid = require("react-uuid");
 
 const dataPath = "./data/users.json";
-console.log("dataPath: ", dataPath);
 
 function readFile(path) {
   return new Promise(function (resolve, reject) {
@@ -41,7 +40,6 @@ async function getUser(userId) {
   try {
     const data = await readFile(dataPath);
     const user = data.find((user) => user.id === userId);
-    console.log(user);
     return user;
   } catch (error) {
     console.error(error.message);
@@ -52,7 +50,6 @@ async function getUser(userId) {
 async function getUsers() {
   try {
     const data = await readFile(dataPath);
-    console.log("data: ", data);
     return data;
   } catch (error) {
     console.error(error.message);
@@ -64,7 +61,6 @@ async function getUserByEmail(email) {
   try {
     const data = await readFile(dataPath);
     const user = data.find((user) => user.email === email);
-    console.log(user);
     return user;
   } catch (error) {
     console.error(error.message);

@@ -21,7 +21,6 @@ router.get("/listings/:id", auth, async (req, res) => {
 
 router.get("/:id", auth, async (req, res) => {
   const userId = req.params.id;
-  console.log("get userId: ", userId);
   const user = await usersStore.getUserById(userId);
   if (!user) return res.status(404).send();
   const resource = userMapper(user);
@@ -30,7 +29,6 @@ router.get("/:id", auth, async (req, res) => {
 
 router.delete("/:id", auth, async (req, res) => {
   const userId = req.params.id;
-  console.log("user delete", req.params.id);
   const user = await usersStore.getUserById(userId);
 
   const listingsArray = await listingsStore.getUserListings(user.id);

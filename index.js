@@ -1,5 +1,27 @@
 const express = require("express");
 const dotenv = require("dotenv");
+
+// following will setup your process.env appropriately
+// only requirement is to set .env file correctly
+const initProcessEnv = () => {
+  dotenv.config({ path: "./config/.env" }); // load env
+  if (process.env.DEVELOPMENT_ENV) {
+    dotenv.config({ path: "./config/development.env" });
+    console.log("environment: ", "Development");
+  }
+  if (process.env.PRODUCTION_ENV) {
+    dotenv.config({ path: "./config/production.env" });
+    console.log("environment: ", "Production");
+  }
+  if (process.env.STAGING_ENV) {
+    dotenv.config({ path: "./config/staging.env" });
+    console.log("environment: ", "Staging");
+  }
+};
+
+initProcessEnv();
+require("./config/settings");
+
 const categories = require("./routes/categories");
 const listings = require("./routes/listings");
 const listing = require("./routes/listing");
@@ -33,26 +55,14 @@ app.use("/api/messages", messages);
 app.use("/api/initialize", loadSamples);
 app.use("/test", test);
 
-const initProcessEnv = () => {
-  dotenv.config({ path: "./config/.env" }); // load env
-  console.log(process.env.NODE_ENV);
-  if (process.env.NODE_ENV === "development") {
-    dotenv.config({ path: "./config/development.env" });
-    console.log("developemtn stuff");
-    console.log(process.env.PORT);
-    console.log(process.env.BASE_IMAGE_URL);
-  }
-  console.log("end init");
-};
-
 // make sure we always have our base users available. Will not add if already there.
 const startup = async () => {
-  initProcessEnv();
   await usersStore.addSamples();
   const port = process.env.PORT;
   app.listen(port, function () {
     console.log(`Server started at port: ${port}}....`);
-    console.log("NODE_ENV: ", process.env.NODE_ENV);
+    if (process.env.IS_JSON_SERVER) console.log("Json Server");
+    if (process.env.IS_GCLOUD_SERVER) console.log("Gcloud Server");
   });
 };
 

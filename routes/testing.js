@@ -1,11 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const storage = require("../store/storage");
+// const storage = require("../services/json-server/jsonStorage");
 
 router.get("/", async (req, res) => {
   try {
     console.log("begin testings");
-    await storage.deleteFile("d35e8a-7c5e-6be-d6f0-7df6d2da037a_userIcon.jpg");
+    // const files = await storage.deleteImages(
+    //   "7da4f8-657-cb87-af72-8053a63e4ebe"
+    // );
+    // console.log("Files: ", files);
+
     res.send(`testing finished ok: `);
   } catch (error) {
     console.log("trycatch error", error);

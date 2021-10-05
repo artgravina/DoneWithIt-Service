@@ -1,4 +1,11 @@
-const storage = require("../services/json-server/jsonStorage");
+let storage;
+if (process.env.IS_JSON_SERVER) {
+  storage = require("../services/json-server/jsonStorage");
+} else if (process.env.IS_GCLOUD_SERVER) {
+  storage = require("../services/firebase/firebaseStorage");
+} else {
+  console.log("no storage service available!");
+}
 
 // file is standard File object resulting in html upload
 // path is complete path i.e. /folder/filename

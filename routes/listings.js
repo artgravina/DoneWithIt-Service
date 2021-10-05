@@ -46,7 +46,6 @@ const track = (req, res, next) => {
 
 router.get("/", async (req, res) => {
   const listings = await store.getListings();
-  // console.log("listings: ", listings);
   const resources = listings.map(listingMapper);
   res.send(resources);
 });
@@ -106,53 +105,55 @@ router.put(
   ],
 
   async (req, res) => {
-    console.log("updateListings");
-    const listing = {
-      id: req.params.id,
-      title: req.body.title,
-      price: parseFloat(req.body.price),
-      categoryId: parseInt(req.body.categoryId),
-      description: req.body.description,
-    };
+    try {
+      console.log("updateListings", req.params);
+      const listing = {
+        id: req.params.id,
+        title: req.body.title,
+        price: parseFloat(req.body.price),
+        categoryId: parseInt(req.body.categoryId),
+        description: req.body.description,
+      };
 
-    const newFilenames = req.images.map((fileName) => ({ fileName: fileName }));
-    const existingFilenames = JSON.parse(req.body.existingFilenames);
-    const deletedFilenames = JSON.parse(req.body.deletedFilenames);
+      const newFilenames = req.images.map((fileName) => ({
+        fileName: fileName,
+      }));
+      const existingFilenames = JSON.parse(req.body.existingFilenames);
+      const deletedFilenames = JSON.parse(req.body.deletedFilenames);
 
-    listing.images = [];
-    // Files that have been already uploaded
-    console.log(existingFilenames, existingFilenames.length);
-    for (const index in existingFilenames) {
-      const filename = existingFilenames[index];
-      listing.images.push({ fileName: filename });
+      listing.images = [];
+      // Files that have been already uploaded
+      for (const index in existingFilenames) {
+        const filename = existingFilenames[index];
+        listing.images.push({ fileName: filename });
+      }
+
+      // Files that have been uploaded this time
+      for (const index in newFilenames) {
+        const image = newFilenames[index];
+        listing.images.push(image);
+      }
+
+      // existing image user has deleted
+      for (const index in deletedFilenames) {
+        const filename = deletedFilenames[index];
+        await storage.deleteFile(filename);
+      }
+
+      if (req.body.location) listing.location = JSON.parse(req.body.location);
+      if (req.user) listing.userId = req.user.id;
+
+      // res.status(201).send("test ok");
+      // return;
+      //=============
+
+      store.updateListing(listing);
+
+      res.status(201).send(listing);
+    } catch (error) {
+      console.log(error.message);
+      res.status(404).send({ error: error.message });
     }
-
-    // Files that have been uploaded this time
-    console.log(newFilenames);
-    for (const index in newFilenames) {
-      const image = newFilenames[index];
-      listing.images.push(image);
-    }
-
-    // existing image user has deleted
-    console.log(deletedFilenames, deletedFilenames.length);
-    for (const index in deletedFilenames) {
-      const filename = deletedFilenames[index];
-      await storage.deleteFile(filename);
-    }
-
-    console.log(listing.images);
-
-    if (req.body.location) listing.location = JSON.parse(req.body.location);
-    if (req.user) listing.userId = req.user.id;
-
-    // res.status(201).send("test ok");
-    // return;
-    //=============
-
-    store.updateListing(listing);
-
-    res.status(201).send(listing);
   }
 );
 

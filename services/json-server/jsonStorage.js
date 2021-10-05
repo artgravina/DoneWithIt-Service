@@ -1,7 +1,8 @@
 var fs = require("fs");
 const sharp = require("sharp");
+const imageSettings = require("../../config/settings");
 
-const imagesPath = "./public";
+console.log("jsonStorage settings: ", imageSettings);
 
 // file is standard File object resulting in html upload
 // filename is name of image
@@ -11,10 +12,11 @@ const imagesPath = "./public";
 // returns the public url or error message
 const upload = async (file, filename, params) => {
   const port = process.env.PORT;
-  const baseUrl = process.env.BASE_IMAGE_URL;
-  const directory = "images";
-  const outputFile = `${imagesPath}/${directory}/${filename}`;
-  const publicUrl = `${baseUrl}:${port}/${directory}/${filename}`;
+  const baseUrl = imageSettings.baseUrl;
+  const directory = imageSettings.directory;
+  const fileUri = imageSettings.fileUri;
+  const outputFile = `${fileUri}/${directory}/${filename}`;
+  const publicUrl = `${baseUrl}/${filename}`;
   console.log("outputFile: ", outputFile);
   console.log("publicUrl: ", publicUrl);
   const newImageBuffer = await sharp(file.buffer)
@@ -25,28 +27,40 @@ const upload = async (file, filename, params) => {
   return publicUrl;
 };
 
-async function listImages(path) {
-  // const bucket = storage.bucket(bucketName);
-  // const [files] = await bucket.getFiles({
-  //   delimiter: "/",
-  //   prefix: path,
-  // });
-  // let filenames = [];
-  // files.forEach((file) => {
-  //   filenames.push(file.name);
-  // });
-  // return filenames;
+async function listImages(filename) {
+  const fileUri = imageSettings.fileUri;
+  const directory = imageSettings.directory;
+  const dirPath = `${fileUri}/${directory}`;
+  const files = fs.readdirSync(dirPath);
+  console.log("files: ", files);
+
+  let filenames = [];
+  files.forEach(function (name) {
+    if (name.startsWith(filename)) {
+      try {
+        filenames.push(name);
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      console.log("don't delete: ", name);
+    }
+  });
+
+  return filenames;
 }
 
 //  delete all images with this prefix
 async function deleteImages(filename) {
-  const dirPath = `${imagesPath}/${directory}`;
+  const fileUri = imageSettings.fileUri;
+  const directory = imageSettings.directory;
+  const dirPath = `${fileUri}/${directory}`;
   const files = fs.readdirSync(dirPath);
 
-  files.forEach(function (file) {
-    if (file.startsWith(filename)) {
+  files.forEach(function (name) {
+    if (name.startsWith(filename)) {
       try {
-        const filePath = dirPath + "/" + file;
+        const filePath = dirPath + "/" + name;
         console.log("filePath: ", filePath);
         fs.unlinkSync(filePath);
         //file removed
@@ -54,22 +68,22 @@ async function deleteImages(filename) {
         console.error(err);
       }
     } else {
-      console.log("don't delete: ", file);
+      console.log("don't delete: ", name);
     }
   });
 }
 
 async function deleteFile(filename) {
+  console.log("jsonStorage deleteFile: ", filename);
   const resp = await deleteImages(filename);
 }
 
 async function deleteListingImages(listing) {
-  // const bucket = storage.bucket(bucketName);
-  // for (const index in listing.images) {
-  //   let filename = listing.images[index].fileName;
-  //   await deleteFile(filename);
-  // }
-  // return true;
+  for (const index in listing.images) {
+    let filename = listing.images[index].fileName;
+    await deleteFile(filename);
+  }
+  return true;
 }
 
 // will delete both thumb/full for a url
@@ -86,7 +100,9 @@ async function deleteUrlImages(urls) {
 }
 
 async function clearAllImages() {
-  const dirPath = `${imagesPath}/${directory}`;
+  const fileUri = imageSettings.fileUri;
+  const directory = imageSettings.directory;
+  const dirPath = `${fileUri}/${directory}`;
   const files = fs.readdirSync(dirPath);
 
   files.forEach(function (file) {
@@ -104,7 +120,9 @@ async function clearAllImages() {
 async function addSamples() {
   var samplesDir = "./uploads/sample_images";
   console.log("addSample Images");
-  const outDir = `${imagesPath}/${directory}`;
+  const fileUri = imageSettings.fileUri;
+  const directory = imageSettings.directory;
+  const outDir = `${fileUri}/${directory}`;
   const files = fs.readdirSync(samplesDir);
 
   files.forEach(async function (file) {
@@ -127,4 +145,6 @@ module.exports = {
   deleteListingImages,
   addSamples,
   clearAllImages,
+  listImages,
+  deleteImages,
 };

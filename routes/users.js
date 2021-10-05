@@ -32,11 +32,9 @@ router.post(
   [multer.single("userIcon"), validateWith(schemaPost), iconResize],
 
   async (req, res) => {
-    console.log("userIcon filename: ================", req.filename);
-
     const { name, email, password } = req.body;
     const existingUser = await usersStore.getUserByEmail(email);
-    console.log("existingUser: ", existingUser);
+
     if (existingUser) {
       return res
         .status(400)
@@ -48,7 +46,6 @@ router.post(
     user.id = newuser.id;
 
     const userResource = userMapper(user);
-    console.log("userAdded: ", userResource);
     res.status(201).send(userResource);
   }
 );
@@ -71,9 +68,7 @@ router.put(
   [multer.single("userIcon"), validateWith(schemaUpdate), iconResize],
 
   async (req, res) => {
-    console.log("updateUser start");
     const userId = req.params.id;
-    console.log("userId: ", userId);
 
     const updatedUser = await usersStore.getUserById(userId);
     if (!updatedUser) {
@@ -85,7 +80,6 @@ router.put(
 
     if (deleteOrigIcon === true) {
       // we have to delete old one\
-      console.log("Delete Prior icon: ", updatedUser.icon);
       await storage.deleteFile(updatedUser.icon);
     }
 
