@@ -16,7 +16,3 @@ Two data storage envirnoments have been set up:
 Either service is configured utilizing the environment files stored in the 'config' directory.
 
 ## Installation instructions to follow
-
-App: https://github.com/artgravina/DoneWithIt.git
-
-Server: https://github.com/artgravina/DoneWithIt-Service.git
