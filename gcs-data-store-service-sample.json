@@ -1,14 +1,5 @@
 {
-    "_comment": "The below is sample. You need to create your own at Google cloud services",
-    "_comment_2": "then copy data to: gcs-datastore-service.json",
-    "type": "service_account",
-    "project_id": "yourprojectid",
-    "private_key_id": "your private key",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nyour encryped key=\n-----END PRIVATE KEY-----\n",
-    "client_email": "yourprojectid@appspot.gserviceaccount.com",
-    "client_id": "083503808083508305",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/yourprojectid%40appspot.gserviceaccount.com"
+    "comment": "provide your Gcloud credentials",
+    "location": "use the filename below",
+    "filename": "gcs-datastore-service.json"
 }
